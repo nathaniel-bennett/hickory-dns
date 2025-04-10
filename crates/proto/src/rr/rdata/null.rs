@@ -36,7 +36,7 @@ use crate::{
 /// experimental extensions of the DNS.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Default, Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Default, Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct NULL {
     anything: Vec<u8>,
 }

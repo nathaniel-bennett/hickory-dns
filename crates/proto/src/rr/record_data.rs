@@ -17,6 +17,7 @@ use core::{cmp::Ordering, fmt};
 #[cfg(feature = "std")]
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
+use entropic::Entropic;
 use enum_as_inner::EnumAsInner;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -60,7 +61,7 @@ use crate::dnssec::rdata::DNSSECRData;
 /// length (including the length octet).
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, EnumAsInner, PartialEq, Clone, Eq)]
+#[derive(Debug, Entropic, EnumAsInner, PartialEq, Clone, Eq)]
 #[non_exhaustive]
 pub enum RData {
     /// ```text

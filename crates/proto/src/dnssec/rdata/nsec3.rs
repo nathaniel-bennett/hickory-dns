@@ -107,7 +107,7 @@ use super::DNSSECRData;
 ///  field is determined by the preceding Hash Length field.
 /// ```
 #[cfg_attr(feature = "serde", derive(Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct NSEC3 {
     hash_algorithm: Nsec3HashAlgorithm,
     opt_out: bool,

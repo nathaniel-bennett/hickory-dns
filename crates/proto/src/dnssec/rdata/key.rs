@@ -162,7 +162,7 @@ use crate::{
 ///               the zone regardless of the value of the signatory field.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct KEY {
     key_trust: KeyTrust,
     key_usage: KeyUsage,
@@ -523,7 +523,7 @@ impl From<KEY> for RData {
 
 /// Specifies in what contexts this key may be trusted for use
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum KeyTrust {
     /// Use of the key is prohibited for authentication
     NotAuth,
@@ -574,7 +574,7 @@ impl From<KeyTrust> for u16 {
 }
 
 /// Declares what this key is for
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub enum KeyUsage {
     /// key associated with a "user" or "account" at an end entity, usually a host
@@ -721,7 +721,7 @@ impl From<KeyUsage> for u16 {
 /// ```
 #[deprecated = "Deprecated by RFC3007"]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, Default, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub struct UpdateScope {
     /// this key is authorized to attach,
     ///   detach, and move zones by creating and deleting NS, glue A, and
@@ -830,7 +830,7 @@ impl From<UpdateScope> for u16 {
 /// All Protocol Octet values except DNSSEC (3) are eliminated
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum Protocol {
     /// Not in use
     #[deprecated = "Deprecated by RFC3445"]

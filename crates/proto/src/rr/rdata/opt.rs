@@ -168,7 +168,7 @@ use crate::dnssec::SupportedAlgorithms;
 ///       in a subsequent specification.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Default, Debug, Clone)]
+#[derive(Default, Debug, entropic::Entropic, Clone)]
 pub struct OPT {
     options: Vec<(EdnsCode, EdnsOption)>,
 }
@@ -368,7 +368,7 @@ enum OptReadState {
 
 /// The code of the EDNS data option
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Hash, Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Hash, Debug, Copy, Clone, PartialEq, entropic::Entropic, Eq)]
 #[non_exhaustive]
 pub enum EdnsCode {
     /// [RFC 6891, Reserved](https://tools.ietf.org/html/rfc6891)
@@ -465,7 +465,7 @@ impl From<EdnsCode> for u16 {
 ///
 /// <https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-13>
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Hash)]
+#[derive(Debug, PartialOrd, PartialEq, entropic::Entropic, Eq, Clone, Hash)]
 #[non_exhaustive]
 pub enum EdnsOption {
     /// [RFC 6975, DNSSEC Algorithm Understood](https://tools.ietf.org/html/rfc6975)
@@ -582,7 +582,7 @@ impl<'a> From<&'a EdnsOption> for EdnsCode {
 ///    their implementation.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialOrd, PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialOrd, PartialEq, entropic::Entropic, Eq, Clone, Copy, Hash)]
 pub struct ClientSubnet {
     address: IpAddr,
     source_prefix: u8,

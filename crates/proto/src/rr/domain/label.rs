@@ -25,7 +25,7 @@ const WILDCARD: &[u8] = b"*";
 const IDNA_PREFIX: &[u8] = b"xn--";
 
 /// Labels are always stored as ASCII, unicode characters must be encoded with punycode
-#[derive(Clone, Eq)]
+#[derive(Clone, entropic::Entropic, Eq)]
 pub struct Label(TinyVec<[u8; 24]>);
 
 impl Label {

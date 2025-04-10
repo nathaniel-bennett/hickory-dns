@@ -49,7 +49,7 @@ use crate::{
 ///   1035 [7].
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct NAPTR {
     order: u16,
     preference: u16,

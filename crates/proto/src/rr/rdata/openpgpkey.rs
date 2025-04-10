@@ -26,7 +26,7 @@ use crate::{
 /// in [RFC4880].
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct OPENPGPKEY {
     public_key: Vec<u8>,
 }

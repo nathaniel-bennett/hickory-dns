@@ -100,7 +100,7 @@ use crate::serialize::binary::*;
 ///    successor document.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, entropic::Entropic, Eq, Hash, PartialOrd, Ord, Debug)]
 #[non_exhaustive]
 pub enum Algorithm {
     /// DO NOT USE, MD5 is a compromised hashing function, it is here for backward compatibility

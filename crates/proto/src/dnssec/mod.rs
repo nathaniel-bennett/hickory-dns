@@ -68,7 +68,7 @@ pub use self::verifier::Verifier;
 ///
 /// <https://www.iana.org/assignments/ds-rr-types/ds-rr-types.xhtml>
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Debug)]
+#[derive(Clone, Copy, PartialEq, entropic::Entropic, Eq, Hash, PartialOrd, Ord, Debug)]
 #[non_exhaustive]
 pub enum DigestType {
     /// [RFC 3658](https://tools.ietf.org/html/rfc3658)

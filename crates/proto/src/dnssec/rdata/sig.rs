@@ -181,7 +181,7 @@ use crate::{
 ///    minutes into the past and 5 minutes into the future.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct SIG {
     type_covered: RecordType,
     algorithm: Algorithm,

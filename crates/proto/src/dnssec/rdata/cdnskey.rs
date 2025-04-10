@@ -25,7 +25,7 @@ use super::DNSSECRData;
 
 /// Child DNSKEY. See RFC 8078.
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct CDNSKEY {
     flags: u16,
     algorithm: Option<Algorithm>,

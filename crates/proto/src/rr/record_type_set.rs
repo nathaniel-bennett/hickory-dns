@@ -20,7 +20,7 @@ use crate::serialize::binary::*;
 /// A collection of record types.
 ///
 /// This represents the "type bit maps" field in various records.
-#[derive(Clone)]
+#[derive(Clone, entropic::Entropic)]
 pub(crate) struct RecordTypeSet {
     types: BTreeSet<RecordType>,
     original_encoding: Option<Vec<u8>>,

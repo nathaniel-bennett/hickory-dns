@@ -9,6 +9,7 @@
 #![allow(clippy::use_self)]
 
 use alloc::{string::String, vec::Vec};
+use entropic::Entropic;
 use core::{
     cmp::{Ord, Ordering, PartialOrd},
     convert::TryFrom,
@@ -72,7 +73,7 @@ use crate::{
 ///   fall back to non-SVCB connection establishment.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct SVCB {
     svc_priority: u16,
     target_name: Name,
@@ -213,7 +214,7 @@ impl SVCB {
 ///      network byte order.  (See Section 14.3.2 for the defined values.)
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum SvcParamKey {
     /// Mandatory keys in this RR
     #[cfg_attr(feature = "serde", serde(rename = "mandatory"))]
@@ -366,7 +367,7 @@ impl PartialOrd for SvcParamKey {
 ///      determined by the SvcParamKey.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, EnumAsInner)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, EnumAsInner)]
 pub enum SvcParamValue {
     ///    In a ServiceMode RR, a SvcParamKey is considered "mandatory" if the
     ///    RR will not function correctly for clients that ignore this
@@ -591,7 +592,7 @@ impl fmt::Display for SvcParamValue {
 ///    and otherwise has no effect.)
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 #[repr(transparent)]
 pub struct Mandatory(pub Vec<SvcParamKey>);
 
@@ -773,7 +774,7 @@ impl fmt::Display for Mandatory {
 ///   greatest number of clients.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 #[repr(transparent)]
 pub struct Alpn(pub Vec<String>);
 
@@ -854,7 +855,7 @@ impl fmt::Display for Alpn {
 ///   sequences.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(PartialEq, Eq, Hash, Clone)]
+#[derive(PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 #[repr(transparent)]
 pub struct EchConfigList(pub Vec<u8>);
 
@@ -960,6 +961,23 @@ impl fmt::Debug for EchConfigList {
 #[repr(transparent)]
 pub struct IpHint<T>(pub Vec<T>);
 
+impl<T: entropic::Entropic> Entropic for IpHint<T> {
+    fn from_entropy_source<'a, I: Iterator<Item = &'a u8>, E: entropic::scheme::EntropyScheme>(
+        source: &mut entropic::Source<'a, I, E>,
+    ) -> Result<Self, entropic::EntropicError> {
+        Ok(Self(Vec::from_entropy_source(source)?))
+    }
+
+    fn to_entropy_sink<'a, I: Iterator<Item = &'a mut u8>, E: entropic::scheme::EntropyScheme>(
+        &self,
+        sink: &mut entropic::Sink<'a, I, E>,
+    ) -> Result<usize, entropic::EntropicError> {
+        self.0.to_entropy_sink(sink)
+    }
+}
+
+pub struct Helper<T: Clone>(pub Vec<T>);
+
 impl<'r, T> BinDecodable<'r> for IpHint<T>
 where
     T: BinDecodable<'r>,
@@ -1031,7 +1049,7 @@ where
 ///   MUST NOT be repeated.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 #[repr(transparent)]
 pub struct Unknown(pub Vec<u8>);
 

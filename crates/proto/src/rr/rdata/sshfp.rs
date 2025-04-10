@@ -60,7 +60,7 @@ pub static HEX: Lazy<Encoding> = Lazy::new(|| {
 ///    string output, which is placed as-is in the RDATA fingerprint field.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct SSHFP {
     algorithm: Algorithm,
     fingerprint_type: FingerprintType,
@@ -123,7 +123,7 @@ impl SSHFP {
 /// [RFC 7479](https://tools.ietf.org/html/rfc7479) and
 /// [RFC 8709](https://tools.ietf.org/html/rfc8709).
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum Algorithm {
     /// Reserved value
     Reserved,
@@ -197,7 +197,7 @@ impl From<Algorithm> for u8 {
 /// The fingerprint type values have been updated in
 /// [RFC 6594](https://tools.ietf.org/html/rfc6594).
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum FingerprintType {
     /// Reserved value
     Reserved,

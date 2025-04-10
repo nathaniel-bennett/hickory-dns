@@ -63,7 +63,7 @@ use crate::{
 /// change the SOA RR with known semantics.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct SOA {
     mname: Name,
     rname: Name,

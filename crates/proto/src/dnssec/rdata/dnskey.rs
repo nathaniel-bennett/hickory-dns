@@ -74,7 +74,7 @@ use super::DNSSECRData;
 ///
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct DNSKEY {
     flags: u16,
     public_key: PublicKeyBuf,

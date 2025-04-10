@@ -7,6 +7,8 @@
 
 //! resource record implementation
 
+use entropic::Entropic;
+
 use alloc::borrow::ToOwned;
 use core::{cmp::Ordering, convert::TryFrom, fmt};
 
@@ -83,6 +85,40 @@ pub struct Record<R: RecordData = RData> {
     mdns_cache_flush: bool,
     #[cfg(feature = "__dnssec")]
     proof: Proof,
+}
+
+impl<R: RecordData + Entropic> Entropic for Record<R> {
+    fn from_entropy_source<'a, I: Iterator<Item = &'a u8>, E: entropic::scheme::EntropyScheme>(
+        source: &mut entropic::Source<'a, I, E>,
+    ) -> Result<Self, entropic::EntropicError> {
+        Ok(Self {
+            name_labels: Name::from_entropy_source(source)?,
+            dns_class: DNSClass::from_entropy_source(source)?,
+            ttl: u32::from_entropy_source(source)?,
+            rdata: R::from_entropy_source(source)?,
+            #[cfg(feature = "mdns")]
+            mdns_cache_flush: bool::from_entropy_source(source),
+            #[cfg(feature = "__dnssec")]
+            proof: Proof::from_entropy_source(source)?,
+        })
+    }
+
+    fn to_entropy_sink<'a, I: Iterator<Item = &'a mut u8>, E: entropic::scheme::EntropyScheme>(
+        &self,
+        sink: &mut entropic::Sink<'a, I, E>,
+    ) -> Result<usize, entropic::EntropicError> {
+        let mut written = self.name_labels.to_entropy_sink(sink)?;
+        written += self.dns_class.to_entropy_sink(sink)?;
+        written += self.ttl.to_entropy_sink(sink)?;
+        written += self.rdata.to_entropy_sink(sink)?;
+        #[cfg(feature = "mdns")] {
+            written += self.mdns_cache_flush.to_entropy_sink(sink)?;
+        }
+        #[cfg(feature = "__dnssec")] { 
+            written += self.proof.to_entropy_sink(sink)?;
+        }
+        Ok(written)
+    }
 }
 
 impl Record {

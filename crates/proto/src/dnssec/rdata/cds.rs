@@ -25,7 +25,7 @@ use super::DNSSECRData;
 
 /// Child DS. See RFC 8078.
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct CDS {
     key_tag: u16,
     /// The algorithm of the desired DS record if requesting an update, or `None` if requesting

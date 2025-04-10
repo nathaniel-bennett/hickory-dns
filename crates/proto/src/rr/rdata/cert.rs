@@ -49,7 +49,7 @@ use crate::{
 ///          65535            Reserved
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum CertType {
     /// 0, 255, 65535            Reserved
     Reserved,
@@ -225,7 +225,7 @@ impl fmt::Display for CertType {
 /// 123-251    reserved
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum Algorithm {
     /// 0, 9, 11, 123-251, 255   reserved
     Reserved(u8),
@@ -392,7 +392,7 @@ impl fmt::Display for Algorithm {
 ///    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-|
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct CERT {
     cert_type: CertType,
     key_tag: u16,

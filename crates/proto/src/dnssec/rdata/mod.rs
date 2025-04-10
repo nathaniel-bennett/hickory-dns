@@ -55,7 +55,7 @@ pub type DNSSECRecordType = RecordType;
 
 /// Record data enum variants for DNSSEC-specific records.
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, EnumAsInner, PartialEq, Clone, Eq)]
+#[derive(Debug, EnumAsInner, PartialEq, entropic::Entropic, Clone, Eq)]
 #[non_exhaustive]
 pub enum DNSSECRData {
     /// ```text

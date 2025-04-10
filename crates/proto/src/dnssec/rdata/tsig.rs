@@ -141,7 +141,7 @@ use crate::{
 ///      its contents in requests.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct TSIG {
     algorithm: TsigAlgorithm,
     time: u64,
@@ -181,7 +181,7 @@ pub struct TSIG {
 ///      +--------------------------+----------------+-----------------+
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub enum TsigAlgorithm {
     /// HMAC-MD5.SIG-ALG.REG.INT (not supported for cryptographic operations)
     #[cfg_attr(feature = "serde", serde(rename = "HMAC-MD5.SIG-ALG.REG.INT"))]

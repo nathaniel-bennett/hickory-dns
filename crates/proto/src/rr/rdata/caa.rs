@@ -22,8 +22,9 @@
 #![allow(clippy::use_self)]
 
 use alloc::{string::String, vec::Vec};
-use core::{fmt, str};
+use core::{fmt, str::{self, FromStr}};
 
+use entropic::Entropic;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use url::Url;
@@ -38,7 +39,7 @@ use crate::{
 ///
 /// [RFC 8659, DNS Certification Authority Authorization, November 2019](https://www.rfc-editor.org/rfc/rfc8659)
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Entropic, Eq, Hash, Clone)]
 pub struct CAA {
     pub(crate) issuer_critical: bool,
     pub(crate) reserved_flags: u8,
@@ -187,7 +188,7 @@ impl CAA {
 
 /// Specifies in what contexts this key may be trusted for use
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Entropic, Eq, Hash, Clone)]
 pub enum Property {
     /// The issue property
     ///    entry authorizes the holder of the domain name `Issuer Domain
@@ -282,6 +283,43 @@ pub enum Value {
     Url(Url),
     /// Uninterpreted data, either for a tag that is not known to Hickory DNS, or an invalid value
     Unknown(Vec<u8>),
+}
+
+impl Entropic for Value {
+    fn from_entropy_source<'a, I: Iterator<Item = &'a u8>, E: entropic::scheme::EntropyScheme>(
+        source: &mut entropic::Source<'a, I, E>,
+    ) -> Result<Self, entropic::EntropicError> {
+        let enum_choice = source.get_bounded_len(0..=2)?;
+        Ok(if enum_choice == 0 {
+            Self::Issuer(Option::from_entropy_source(source)?, Vec::from_entropy_source(source)?)
+        } else if enum_choice == 1 {
+            Self::Url(Url::from_str("https://example.com").unwrap()) // TODO: temporary hack
+        } else {
+            Self::Unknown(Vec::from_entropy_source(source)?)
+        })
+    }
+
+    fn to_entropy_sink<'a, I: Iterator<Item = &'a mut u8>, E: entropic::scheme::EntropyScheme>(
+        &self,
+        sink: &mut entropic::Sink<'a, I, E>,
+    ) -> Result<usize, entropic::EntropicError> {
+        match self {
+            Self::Issuer(n, kv) => {
+                let mut written = sink.put_bounded_len(0..=2, 0)?;
+                written += n.to_entropy_sink(sink)?;
+                written += kv.to_entropy_sink(sink)?;
+                Ok(written)
+            }
+            Self::Url(_) => {
+                sink.put_bounded_len(0..=2, 1)
+            }
+            Self::Unknown(v) => {
+                let mut written = sink.put_bounded_len(0..=2, 2)?;
+                written += v.to_entropy_sink(sink)?;
+                Ok(written)
+            }
+        }
+    }
 }
 
 impl Value {
@@ -622,7 +660,7 @@ pub fn read_iodef(url: &[u8]) -> ProtoResult<Url> {
 /// [RFC 8659, DNS Certification Authority Authorization, November 2019](https://www.rfc-editor.org/rfc/rfc8659#section-4.2)
 /// for more explanation.
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Entropic, Eq, Hash, Clone)]
 pub struct KeyValue {
     key: String,
     value: String,

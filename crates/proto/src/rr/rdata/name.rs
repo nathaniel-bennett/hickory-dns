@@ -76,7 +76,7 @@ macro_rules! name_rdata {
     ($name: ident) => {
         #[doc = stringify!(new type for the RecordData of $name)]
         #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-        #[derive(Debug, PartialEq, Eq, Hash, Clone)]
+        #[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
         pub struct $name(pub Name);
 
         impl BinEncodable for $name {

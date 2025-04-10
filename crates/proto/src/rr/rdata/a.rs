@@ -42,6 +42,7 @@ pub use core::net::Ipv4Addr;
 #[cfg(feature = "std")]
 pub use std::net::Ipv4Addr;
 
+use entropic::Entropic;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -53,7 +54,7 @@ use crate::{
 
 /// The DNS A record type, an IPv4 address
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, Entropic, Eq, Hash, Clone, Copy)]
 pub struct A(pub Ipv4Addr);
 
 impl A {

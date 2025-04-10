@@ -24,7 +24,7 @@ use super::{DNSSECRData, SIG};
 
 /// RRSIG is really a derivation of the original SIG record data. See SIG for more documentation
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct RRSIG(SIG);
 
 impl RRSIG {

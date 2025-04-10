@@ -27,6 +27,8 @@ use crate::{
     serialize::binary::{BinDecodable, BinDecoder, BinEncodable, Restrict},
 };
 
+use entropic::Entropic;
+
 pub use self::dns_class::DNSClass;
 pub use self::domain::{IntoName, Name};
 pub use self::record_data::RData;

@@ -11,6 +11,7 @@ use alloc::string::String;
 use core::{fmt, ops::BitOr};
 
 use bitflags::bitflags;
+use entropic::Entropic;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -35,7 +36,7 @@ use crate::{
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[must_use = "Proof is a flag on Record data, it should be interrogated before using a record"]
-#[derive(Copy, Clone, Debug, Default, Eq, PartialEq, Ord, PartialOrd)]
+#[derive(Copy, Clone, Debug, Default, Entropic, Eq, PartialEq, Ord, PartialOrd)]
 #[repr(u8)]
 pub enum Proof {
     /// An RRset for which the resolver is able to build a chain of

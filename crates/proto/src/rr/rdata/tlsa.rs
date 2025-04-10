@@ -42,7 +42,7 @@ use crate::{
 ///    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct TLSA {
     cert_usage: CertUsage,
     selector: Selector,
@@ -98,7 +98,7 @@ pub struct TLSA {
 /// ```
 
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum CertUsage {
     /// ```text
     ///       0 -- Certificate usage 0 is used to specify a CA certificate, or
@@ -213,7 +213,7 @@ impl From<CertUsage> for u8 {
 ///    (DKIM) [RFC6376].)
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum Selector {
     /// Full certificate: the Certificate binary structure as defined in [RFC5280](https://tools.ietf.org/html/rfc5280)
     #[cfg_attr(feature = "serde", serde(rename = "Cert"))]
@@ -275,7 +275,7 @@ impl From<Selector> for u8 {
 ///    number of hash algorithms.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone, Copy)]
 pub enum Matching {
     /// Exact match on selected content
     #[cfg_attr(feature = "serde", serde(rename = "Full"))]

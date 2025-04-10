@@ -79,7 +79,7 @@ use super::DNSSECRData;
 ///  field.
 /// ```
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct NSEC3PARAM {
     hash_algorithm: Nsec3HashAlgorithm,
     opt_out: bool,

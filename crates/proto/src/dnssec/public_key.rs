@@ -43,7 +43,7 @@ pub trait PublicKey {
 
 /// An owned variant of PublicKey
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Debug, entropic::Entropic, Eq, Hash, PartialEq)]
 pub struct PublicKeyBuf {
     key_buf: Vec<u8>,
     algorithm: Algorithm,

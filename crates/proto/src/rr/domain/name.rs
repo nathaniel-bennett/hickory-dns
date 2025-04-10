@@ -7,6 +7,8 @@
 
 //! domain name, aka labels, implementation
 
+use entropic::Entropic;
+
 #[cfg(feature = "serde")]
 use alloc::string::ToString;
 use alloc::{string::String, vec::Vec};
@@ -33,7 +35,7 @@ use crate::serialize::binary::{
 };
 
 /// A domain name
-#[derive(Clone, Default, Eq)]
+#[derive(Clone, Default, Entropic, Eq)]
 pub struct Name {
     is_fqdn: bool,
     label_data: TinyVec<[u8; 32]>,

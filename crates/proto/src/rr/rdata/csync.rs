@@ -38,7 +38,7 @@ use crate::{
 ///
 /// [rfc7477]: https://tools.ietf.org/html/rfc7477
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, entropic::Entropic, Eq, Hash, Clone)]
 pub struct CSYNC {
     soa_serial: u32,
     immediate: bool,

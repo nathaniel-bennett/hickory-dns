@@ -34,6 +34,7 @@ pub use core::net::Ipv6Addr;
 #[cfg(feature = "std")]
 pub use std::net::Ipv6Addr;
 
+use entropic::Entropic;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -45,7 +46,7 @@ use crate::{
 
 /// The DNS AAAA record type, an IPv6 address
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(Debug, PartialEq, Entropic, Eq, Hash, Clone, Copy)]
 pub struct AAAA(pub Ipv6Addr);
 
 impl AAAA {
