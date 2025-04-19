@@ -35,13 +35,57 @@ use crate::serialize::binary::{
 };
 
 /// A domain name
-#[derive(Clone, Default, Entropic, Eq)]
+#[derive(Clone, Default, Eq)]
 pub struct Name {
     is_fqdn: bool,
     label_data: TinyVec<[u8; 32]>,
     // This 24 is chosen because TinyVec accommodates an inline buffer up to 24 bytes without
     // increasing its stack footprint
     label_ends: TinyVec<[u8; 24]>,
+}
+
+impl Entropic for Name {
+    fn from_entropy_source<'a, I: Iterator<Item = &'a u8>, E: entropic::scheme::EntropyScheme>(
+        source: &mut entropic::Source<'a, I, E>,
+    ) -> Result<Self, entropic::EntropicError> {
+        let mut name = Name::new();
+        let mut buf = [0u8; 255];
+
+        let num_labels = source.get_bounded_len(0..=8)?;
+        for _ in 0..num_labels {
+            let rem_len = 255 - name.encoded_len() - 1;
+            if rem_len == 0 {
+                break
+            }
+            let label_len = source.get_bounded_len(1..=rem_len)?;
+
+            source.get_slice(&mut buf[..label_len])?;
+            name.extend_name(&buf[..label_len]).unwrap();
+        }
+
+        Ok(name)
+    }
+
+    fn to_entropy_sink<'a, I: Iterator<Item = &'a mut u8>, E: entropic::scheme::EntropyScheme>(
+        &self,
+        sink: &mut entropic::Sink<'a, I, E>,
+    ) -> Result<usize, entropic::EntropicError> {
+        let num_labels = self.num_labels();
+        let mut written = sink.put_bounded_len(0..=8, num_labels as usize)?;
+
+        let mut label_idx = 0;
+
+        for i in 0..num_labels as usize {
+            let rem_len = 255 - (i + self.label_ends.as_slice()[..i].iter().sum::<u8>() as usize) - 1;
+            let label_len = self.label_ends[i] as usize;
+            written += sink.put_bounded_len(1..=rem_len, label_len)?;
+
+            written += sink.put_slice(&self.label_data.as_slice()[label_idx..label_idx + label_len])?;
+            label_idx += label_len;
+        }
+
+        Ok(written)
+    }
 }
 
 impl Name {
